@@ -1,0 +1,60 @@
+{
+    "apiEndpoints": [
+        {
+            "name": "store_sunrise_sunset",
+            "url": "http://127.0.0.1:8000/api/sunrise_sunset/"
+        },
+        {
+            "name": "store_sido_realtime_airquality",
+            "url": "http://127.0.0.1:8000/api/sido_realtime_airquality/"
+        },
+        {
+            "name": "store_mid_term_temperature",
+            "url": "http://127.0.0.1:8000/api/mid_term_temperature/"
+        },
+        {
+            "name": "store_mid_term_land_forecast",
+            "url": "http://127.0.0.1:8000/api/mid_term_land_forecast/"
+        },
+        {
+            "name": "store_air_quality_forecast",
+            "url": "http://127.0.0.1:8000/api/air_quality_forecast/"
+        },
+        {
+            "name": "store_fine_dust_weekly_forecast",
+            "url": "http://127.0.0.1:8000/api/fine_dust_weekly_forecast/"
+        },
+        {
+            "name": "store_fct_land_forecast",
+            "url": "http://host.docker.internal:8000/api/fct_land_forecast/"
+        },
+        {
+            "name": "store_fct_ocean_forecast",
+            "url": "http://host.docker.internal:8000/api/fct_ocean_forecast/"
+        },
+        {
+            "name": "fct_shrt_station_code",
+            "url": "http://127.0.0.1:8000/api/fct_shrt_station_code/"
+        },
+        {
+            "name": "store_mid_land_Temp_forecast",
+            "url": "http://host.docker.internal:8000/api/fct_mid_land_Temp_forecast/"
+        },
+        {
+            "name": "store_mid_land_Status_forecast",
+            "url": "http://host.docker.internal:8000/api/fct_mid_land_Status_forecast/"
+        },
+        {
+            "name": "store_fct_alert_forecast",
+            "url": "http://127.0.0.1:8000/api/fct_alert_forecast/"
+        },
+        {
+            "name": "store_obs_aws_1hr",
+            "url": "http://127.0.0.1:8000/api/store_obs_aws_1hr/"
+        },
+        {
+            "name": "store_stn_aws",
+            "url": "http://127.0.0.1:8000/api/store_stn_aws/"
+        }
+    ]
+}

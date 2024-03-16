@@ -1,0 +1,115 @@
+{
+  "apiEndpoints": [
+    {
+      "name": "대기질예보통보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "returnType": "JSON",
+        "searchDate": "2024-02-10",
+        "informCode": ""
+      }
+    },
+    {
+      "name": "초미세먼지주간예보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustWeekFrcstDspth",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "returnType": "JSON",
+        "searchDate": ""
+      }
+    },
+    {
+      "name": "측정소별실시간측정정보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "returnType": "JSON",
+        "stationName": "종로구",
+        "dataTerm": "DAILY",
+        "ver": "1.4"
+      }
+    },
+    {
+      "name": "통합대기환경지수나쁨이상측정소목록조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getUnityAirEnvrnIdexSnstiveAboveMsrstnList",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "returnType": "JSON"
+      }
+    },
+    {
+      "name": "시도별실시간측정정보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "returnType": "JSON",
+        "sidoName": "부산",
+        "ver": "1.4"
+      }
+    },
+    {
+      "name": "측정소목록조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList",
+      "params": {
+        "serviceKey": "",
+        "returnType": "JSON",
+        "numOfRows": "1000",
+        "pageNo": "1"
+      }
+    },
+    {
+      "name": "근접측정소목록조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList",
+      "params": {
+        "serviceKey": "",
+        "returnType": "JSON",
+        "tmX": "244148.546388",
+        "tmY": "412423.75772",
+        "ver": "1.1"
+      }
+    },
+    {
+      "name": "TM기준좌표조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getTMStdrCrdnt",
+      "params": {
+        "serviceKey": "",
+        "returnType": "JSON",
+        "numOfRows": "1000",
+        "pageNo": "1",
+        "umdName": "혜화동"
+      }
+    },
+    {
+      "name": "미세먼지경보현황정보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo",
+      "params": {
+        "serviceKey": "",
+        "returnType": "JSON",
+        "numOfRows": "1000",
+        "pageNo": "1",
+        "year": "2024",
+        "itemCode": ""
+      }
+    }
+  ]
+}

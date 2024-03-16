@@ -1,0 +1,124 @@
+{
+  "apiEndpoints": [
+    {
+      "name": "초단기실황조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "base_date": "20240210",
+        "base_time": "1500",
+        "nx": "55",
+        "ny": "127"
+      }
+    },
+    {
+      "name": "초단기예보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "base_date": "20240209",
+        "base_time": "2000",
+        "nx": "55",
+        "ny": "127"
+      }
+    },
+    {
+      "name": "단기예보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "base_date": "20240209",
+        "base_time": "2000",
+        "nx": "55",
+        "ny": "127"
+      }
+    },
+    {
+      "name": "예보버전조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getFcstVersion",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "ftype": "VSRT",
+        "basedatetime": "202402102200"
+      }
+    },
+    {
+      "name": "중기육상예보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "regId": "11B00000",
+        "tmFc": "202402120600"
+      }
+    },
+    {
+      "name": "중기전망조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "stnId": "108",
+        "tmFc": "202402120600"
+      }
+    },
+    {
+      "name": "중기기온조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "regId": "11B10101",
+        "tmFc": "202402120600"
+      }
+    },
+    {
+      "name": "중기해상예보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidSeaFcst",
+      "params": {
+        "serviceKey": "",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "JSON",
+        "regId": "12A20000",
+        "tmFc": "202402120600"
+      }
+    },
+    {
+      "name": "지역별해달출몰시각정보조회",
+      "serviceKeyName": "public_data_portal",
+      "url": "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getAreaRiseSetInfo",
+      "params": {
+        "serviceKey": "",
+        "locdate": "20240213",
+        "location": "서울"
+      }
+    }
+  ]
+}
