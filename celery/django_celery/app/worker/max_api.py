@@ -307,7 +307,18 @@ class MaxAPI:
                             "maxH": f"{gubuns[14]}",
                 }
                 print(json.dumps(filtered_data_dict, indent=4, ensure_ascii=False))
-                send_data_to_endpoint('store_mid_land_Temp_forecast', filtered_data_dict)
+                # send_data_to_endpoint('store_mid_land_Temp_forecast', filtered_data_dict)
+                try:
+                    send_data_to_endpoint('store_mid_land_Temp_forecast', filtered_data_dict)
+                except Exception as e:  # 'e'를 사용하여 예외를 잡습니다.
+                    # 여기에 오류 로깅이나 다른 예외 처리 로직을 추가할 수 있습니다.
+                    print(f"An error occurred: {e}")
+
+                    # 다음과 같이 예외 정보를 CSV 파일에 쓸 수 있습니다.
+                    with open('error_log.csv', 'a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([str(e)])
+
                 
         except requests.HTTPError as http_err:
             print(f"HTTP error occurred: {http_err}")

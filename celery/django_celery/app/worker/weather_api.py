@@ -7,13 +7,29 @@ import csv
 import xmltodict
 from datetime import datetime, timedelta
 import pandas as pd
-
-
+import os
 
 class WeatherAPI:
     def __init__(self, api_endpoints, service_key):
         self.api_endpoints = api_endpoints
         self.service_key = service_key
+
+    @staticmethod
+    def load_api_config(file_path):
+        """Loads API configuration from a JSON file."""
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(current_dir, file_path)
+        with open(full_path, 'r') as file:
+            return json.load(file)["apiEndpoints"]
+        
+    @staticmethod
+    def load_service_key(file_path):
+        """Loads service keys from a JSON file."""
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(current_dir, file_path)
+        with open(full_path, 'r') as file:
+            
+            return json.load(file)
 
     def fetch_data_by_name(self, endpoint_name, base_date, base_time, nx, ny):
 

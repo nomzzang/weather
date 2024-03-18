@@ -52,7 +52,7 @@ app.conf.broker_transport_options = {
 
 # Load task modules from all registered Django apps.
 # app.autodiscover_tasks()
-app.autodiscover_tasks(['worker'])
+app.autodiscover_tasks()
 """
 looking for all the tasks like below:
 - app1/
@@ -66,26 +66,26 @@ looking for all the tasks like below:
 # Periodic task & Cron Table
 
 app.conf.beat_schedule = {
-    'fct_land_forecast_5_11_17': {
-        'task': 'worker.tasks.fct_land_forecast',
-        'schedule': crontab(hour='5,11,17'),
-        'args': (),
-    },
-    'fct_ocean_forecast_5_11_17': {
-        'task': 'worker.tasks.fct_ocean_forecast',
-        'schedule': crontab(hour='5,11,17'),
-        'args': (),
-    },
-    'fct_mid_land_temp_forecast_6_18': {
-        'task': 'worker.tasks.fct_mid_land_temp_forecast',
-        'schedule': crontab(hour='6,18'),
-        'args': (),
-    },
-    'fct_mid_land_status_forecast_6_18': {
-        'task': 'worker.tasks.fct_mid_land_status_forecast',
-        'schedule': crontab(hour='6,18'),
-        'args': (),
-    }
+    # 'fct_land_forecast_5_11_17': {
+    #     'task': 'worker.tasks.fct_land_forecast',
+    #     'schedule': crontab(hour='5,11,17'),
+    #     'args': (),
+    # },
+    # 'fct_ocean_forecast_5_11_17': {
+    #     'task': 'worker.tasks.fct_ocean_forecast',
+    #     'schedule': crontab(hour='5,11,17'),
+    #     'args': (),
+    # },
+    # 'fct_mid_land_temp_forecast_6_18': {
+    #     'task': 'worker.tasks.fct_mid_land_temp_forecast',
+    #     'schedule': crontab(hour='6,18'),
+    #     'args': (),
+    # },
+    # 'fct_mid_land_status_forecast_6_18': {
+    #     'task': 'worker.tasks.fct_mid_land_status_forecast',
+    #     'schedule': crontab(hour='6,18'),
+    #     'args': (),
+    # }
     # ,
     #     'add-every-minute': {
     #     'task': 'worker.tasks.add',
