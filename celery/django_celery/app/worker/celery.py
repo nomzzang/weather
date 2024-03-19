@@ -2,6 +2,7 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 from datetime import timedelta
+from django.conf import settings
 
 # Reference: https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html
 
@@ -52,7 +53,7 @@ app.conf.broker_transport_options = {
 
 # Load task modules from all registered Django apps.
 # app.autodiscover_tasks()
-app.autodiscover_tasks()
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 """
 looking for all the tasks like below:
 - app1/
@@ -87,11 +88,26 @@ app.conf.beat_schedule = {
     #     'args': (),
     # }
     # ,
-    #     'add-every-minute': {
-    #     'task': 'worker.tasks.add',
-    #     'schedule': crontab(minute='*'),
-    #     'args': (20, 20)
-    # }
+    #     'sunrise_sunset_data': {
+    #     'task': 'worker.tasks.sunrise_sunset_data',
+    #     'schedule': crontab(minute=10)
+
+    # },
+    'data_by_shot_forecast-초단기실황조회': {
+        'task': 'worker.tasks.data_by_shot_forecast',
+        'schedule': crontab(minute=30, hour='*'),
+        'args': ('초단기실황조회',),
+    },
+    'data_by_shot_forecast-초단기예보조회': {
+        'task': 'worker.tasks.data_by_shot_forecast',
+        'schedule': crontab(minute=30, hour='*'),
+        'args': ('초단기예보조회',),
+    },
+    'data_by_shot_forecast-단기예보 조회': {
+        'task': 'worker.tasks.data_by_shot_forecast',
+        'schedule': crontab(minute=0, hour=5),
+        'args': ('단기예보조회',),
+    },
 }
 
 @app.task(bind=True, ignore_result=True)

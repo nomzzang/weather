@@ -8,12 +8,18 @@ import xmltodict
 from datetime import datetime, timedelta
 import pandas as pd
 import os
+import logging
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        
 
 class WeatherAPI:
     def __init__(self, api_endpoints, service_key):
         self.api_endpoints = api_endpoints
         self.service_key = service_key
-
+        
     @staticmethod
     def load_api_config(file_path):
         """Loads API configuration from a JSON file."""
@@ -31,7 +37,16 @@ class WeatherAPI:
             
             return json.load(file)
 
-    def fetch_data_by_name(self, endpoint_name, base_date, base_time, nx, ny):
+    def data_by_shot_forecast(self, endpoint_name):
+        now = datetime.now()
+        base_date = now.strftime('%Y%m%d')
+        base_time = now.strftime('%H%M')
+        adjusted_time = now - timedelta(minutes=30)
+        minute = adjusted_time.minute - (adjusted_time.minute % 30)
+        rounded_time = adjusted_time.replace(minute=minute, second=0, microsecond=0).strftime('%H%M')
+        
+        nx = '55'  
+        ny = '127' 
 
         # 실행시킬 경우 데이터가 40분 이후에 검색을 권장하고 있으므로 참고
         # 전체 실행하는데 슬립 0.2초
@@ -43,7 +58,7 @@ class WeatherAPI:
                     params = endpoint['params'].copy()
                     params['serviceKey'] = self.service_key  # Make sure this is the correct key
                     params['base_date'] = base_date
-                    params['base_time'] = '1300'
+                    params['base_time'] = base_time
                     params['nx'] = nx
                     params['ny'] = ny
                     time.sleep(0.2)
@@ -51,19 +66,17 @@ class WeatherAPI:
                     
                     try:
                         response = requests.get(url, params=params)
-                        response.raise_for_status()  # Raises an HTTPError for bad responses
-                        # Successful response handling
+                        response.raise_for_status()
                         json_data = response.json()
-                        data = json.dumps(response.json(), indent=4, ensure_ascii=False)
-                        # print(data)
-                        # return response.json()
-
+                        data = json.dumps(json_data, indent=4, ensure_ascii=False)
+                        logger.info("Successful API call to %s", url)
+                        return json_data
                     except requests.HTTPError as http_err:
-                        print(f"HTTP error occurred: {http_err}")
+                        logger.error("HTTP error occurred: %s", http_err)
+                        # Handle or record the error appropriately
                     except Exception as err:
-                        print(f"An error occurred: {err}")
-                    break  # Exit the loop after finding and processing the matching endpoint
-        
+                        logger.error("An error occurred: %s", err)
+                        # Handle or record the error appropriately
 
         # 실행시 20분 소요 매시간 30분 기준으로 데이터를 받을수있다. 
         # 현재시간 기준으로 
@@ -76,9 +89,12 @@ class WeatherAPI:
                     params = endpoint['params'].copy()
                     params['serviceKey'] = self.service_key  # Make sure this is the correct key
                     params['base_date'] = base_date
-                    params['base_time'] = '1400'
+                    params['base_time'] = rounded_time
                     time.sleep(0.2)
-                    print(base_date, base_time, nx, ny)
+                    print(rounded_time)
+                    # print(base_date, thirty_minutes_earlier, nx, ny)
+                    # print(base_date, thirty_minutes_earlier, nx, ny)
+                    # print(base_date, thirty_minutes_earlier, nx, ny)
 
                     try:
                         response = requests.get(url, params=params)
@@ -121,8 +137,7 @@ class WeatherAPI:
                     params['base_date'] = base_date
                     params['base_time'] = '0500'
                     time.sleep(0.2)
-                    print(base_date, base_time, nx, ny)
-
+                    
                     try:
                         response = requests.get(url, params=params)
                         response.raise_for_status()  # Raises an HTTPError for bad responses

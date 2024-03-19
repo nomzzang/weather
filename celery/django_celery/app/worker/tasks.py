@@ -1,7 +1,10 @@
 from celery import shared_task
 from .max_api import MaxAPI
 from .weather_api import WeatherAPI
+from datetime import datetime
+import logging
 
+logger = logging.getLogger(__name__)
 api_config_path = 'apiconfig/weather_apiConfig.json'
 service_key_path = 'apiconfig/service_key.json'
 
@@ -9,6 +12,26 @@ service_key_path = 'apiconfig/service_key.json'
 weather_api = WeatherAPI(WeatherAPI.load_api_config(api_config_path),
                          WeatherAPI.load_service_key(service_key_path)['weather_serviceKey'])
 
+@shared_task
+def data_by_shot_forecast(endpoint_name):
+    print("data_by_shot_forecast 실행")
+    print("start: tasks", endpoint_name)
+    try:
+        result = weather_api.data_by_shot_forecast(endpoint_name)
+        logger.info(f"Data fetched successfully for {endpoint_name}.")
+        return result
+    except Exception as e:
+        logger.error(f"Error fetching data for {endpoint_name}: {e}")
+
+@shared_task(name='fetch_sunrise_sunset_data')
+def sunrise_sunset_data(location='서울'):
+    try:
+        result = weather_api.sunrise_sunset_data('지역별해달출몰시각정보조회', location)
+        logger.info("sunrise_sunset_data: %s", result)
+        return "sunrise_sunset_data"
+    except Exception as e:
+        logger.error("Error fetching sunrise and sunset data: %s", e)
+        return None
 
 
 @shared_task()
@@ -55,11 +78,3 @@ def add(x, y):
 #     #중기 날씨 예보 조회 6, 18
 #     MaxAPI.fct_mid_land_status_forecast()
 #     return print("test중기 날씨 예보 조회test")
-
-@shared_task()
-def sunrise_sunset_data(location='서울'):
-    # Directly calling a method of WeatherAPI for sunrise and sunset data
-    result = weather_api.sunrise_sunset_data('지역별해달출몰시각정보조회', location)
-    print("sunrise_sunset_data:", result)
-    return "sunrise_sunset_data"
-
