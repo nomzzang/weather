@@ -10,6 +10,7 @@ services:
       - "9000:9000"
     volumes:
       - ./app:/app
+      - ./local_info:/app/worker/local_info
     command: >
       sh -c "python manage.py runserver 0.0.0.0:9000"
     depends_on:
@@ -25,7 +26,8 @@ services:
       - ./app:/app
     # Note that -B is for development purpose, for production, you need to have seperate process to run the beat
     # https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html#starting-the-scheduler
-    command: celery --app=worker worker -l INFO -Q celery,celery:1,celery:2 -B
+    # command: celery --app=worker worker -l INFO -Q celery,celery:1,celery:2 -B
+    command: celery -A worker worker -l info -P eventlet -c 10
     depends_on:
       - redis
 

@@ -3,6 +3,11 @@ from .max_api import MaxAPI
 from .weather_api import WeatherAPI
 from datetime import datetime
 import logging
+from django.conf import settings
+import csv, os
+from celery.exceptions import Ignore
+from celery.exceptions import MaxRetriesExceededError
+import requests
 
 logger = logging.getLogger(__name__)
 api_config_path = 'apiconfig/weather_apiConfig.json'
@@ -12,16 +17,45 @@ service_key_path = 'apiconfig/service_key.json'
 weather_api = WeatherAPI(WeatherAPI.load_api_config(api_config_path),
                          WeatherAPI.load_service_key(service_key_path)['weather_serviceKey'])
 
+
+@shared_task(bind=True, max_retries=3, default_retry_delay=60)
+def fetch_data_for_location(self, endpoint_name, nx, ny):
+    try:
+        # Print the initial request info
+        print(f"Starting task for endpoint {endpoint_name} with nx={nx}, ny={ny}")
+        result = weather_api.data_by_shot_forecast(endpoint_name, nx, ny)
+        # Log success
+        logger.info(f"Success: Data fetched for {endpoint_name} at nx={nx}, ny={ny}")
+        # Optionally, print a success message
+        print(f"Task succeeded for endpoint {endpoint_name} with nx={nx}, ny={ny}")
+        return result
+    except requests.HTTPError as e:
+        # Log and print the HTTP error and retry attempt
+        logger.warning(f"HTTP error on {endpoint_name}: {e}. This is retry number {self.request.retries + 1}. Retrying...")
+        print(f"HTTP error for endpoint {endpoint_name} at nx={nx}, ny={ny}: {e}. Attempting retry {self.request.retries + 1}")
+        try:
+            # Retry the task
+            self.retry(exc=e)
+        except MaxRetriesExceededError as e:
+            # Log and print the failure after maximum retries
+            logger.error(f"Max retries exceeded after {self.request.retries} attempts for task {self.request.id} with endpoint {endpoint_name}, nx={nx}, ny={ny}")
+            print(f"Max retries exceeded for task {self.request.id} with endpoint {endpoint_name}, nx={nx}, ny={ny}. Error: {e}")
+            raise e
+    except Exception as e:
+        # Log and print any other exceptions and mark the task as failed
+        logger.error(f"Error fetching data for {endpoint_name} at nx={nx}, ny={ny}: {e}")
+        print(f"Task failed for endpoint {endpoint_name} with nx={nx}, ny={ny}. Error: {e}")
+        raise e
+    
 @shared_task
 def data_by_shot_forecast(endpoint_name):
-    print("data_by_shot_forecast 실행")
-    print("start: tasks", endpoint_name)
-    try:
-        result = weather_api.data_by_shot_forecast(endpoint_name)
-        logger.info(f"Data fetched successfully for {endpoint_name}.")
-        return result
-    except Exception as e:
-        logger.error(f"Error fetching data for {endpoint_name}: {e}")
+    # Path to your CSV file
+    csv_file_path = os.path.join(settings.BASE_DIR, 'worker', 'local_info', 'local_grid_loc_nx_ny.csv')
+    with open(csv_file_path, mode='r', newline='', encoding='utf-8') as file:
+        csv_reader = csv.DictReader(file)
+        for row in csv_reader:
+            fetch_data_for_location.delay(endpoint_name, row['nx'], row['ny'])
+
 
 @shared_task(name='fetch_sunrise_sunset_data')
 def sunrise_sunset_data(location='서울'):

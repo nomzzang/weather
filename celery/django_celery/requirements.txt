@@ -72,3 +72,4 @@ wsproto==1.2.0
 zope.interface==6.0
 xmltodict==0.13.0
 pandas==2.2.1
+eventlet
