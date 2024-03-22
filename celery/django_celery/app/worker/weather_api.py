@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import os
 import logging
-from celery.exceptions import Ignore
+from .data_sender import send_data_to_endpoint
 
 
 logger = logging.getLogger(__name__)
@@ -65,6 +65,7 @@ class WeatherAPI:
                     # Successful response handling
                     # formatted_response = json.dumps(response.json(), indent=4, ensure_ascii=False)
                     # print(formatted_response)
+                    # send_data_to_endpoint('getUltraSrtNcst', response)
                     return response.json()
                         
         # 실행시 20분 소요 매시간 30분 기준으로 데이터를 받을수있다. 
@@ -116,6 +117,7 @@ class WeatherAPI:
                     # Successful response handling
                     # formatted_response = json.dumps(response.json(), indent=4, ensure_ascii=False)
                     # print(formatted_response)
+            
                     return response.json()
                         
     def fetch_forecast_data_version(self, forecast_type, base_date, base_time):

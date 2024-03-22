@@ -20,13 +20,10 @@ def load_endpoint_url(endpoint_name):
     return None
 
 def send_data_to_endpoint(endpoint_name, data):
-    url = load_endpoint_url(endpoint_name)
-    print(endpoint_name)
-    print("----------")
-    print(url)
-    response = requests.post(url, json=data)
-    response.raise_for_status()  # 오류가 있을 경우 예외 발생
-    print(f"Data successfully sent to {url}")
+    # url = load_endpoint_url(endpoint_name)
+    print("send_data", endpoint_name, data)
+    # response = requests.post(url, json=data)
+    # response.raise_for_status()  # 오류가 있을 경우 예외 발생
     # if url is not None:
     #     try:
     #         return response.json()

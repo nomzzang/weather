@@ -19,15 +19,32 @@ services:
   redis:
     image: redis:7.2.3
 
-  celery:
-    build:
-      context: .
+  # celery:
+  #   build:
+  #     context: .
+  #   volumes:
+  #     - ./app:/app
+  #   # Note that -B is for development purpose, for production, you need to have seperate process to run the beat
+  #   # https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html#starting-the-scheduler
+  #   command: celery --app=worker worker -l INFO -Q celery,celery1,celery2,
+  #   # command: celery -A worker worker -l info -P eventlet -c 10
+  #   # command: ["celery", "-A", "worker", "worker", "-l", "info", "-P", "eventlet", "-c", "10", "-Q", "data_fetch,data_send"]
+  #   depends_on:
+  #     - redis
+
+  celery-1:
+    build: .
     volumes:
       - ./app:/app
-    # Note that -B is for development purpose, for production, you need to have seperate process to run the beat
-    # https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html#starting-the-scheduler
-    # command: celery --app=worker worker -l INFO -Q celery,celery:1,celery:2 -B
-    command: celery -A worker worker -l info -P eventlet -c 10
+    command: celery -A worker worker -l INFO -Q queue1
+    depends_on:
+      - redis
+
+  celery-2:
+    build: .
+    volumes:
+      - ./app:/app
+    command: celery -A worker worker -l INFO -Q queue2
     depends_on:
       - redis
 
@@ -38,14 +55,5 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
     depends_on:
-      - celery
-  #     - celery-standalone
-
-  # celery-standalone:
-  #   build:
-  #     context: standalone_celery
-  #   volumes:
-  #     - ./standalone_celery:/app
-  #   command: celery --app=main worker -l INFO -Q celery3,celery:4,celery:5
-  #   depends_on:
-  #     - redis
+      - celery-1
+      - celery-2

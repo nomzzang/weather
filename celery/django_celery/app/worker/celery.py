@@ -15,38 +15,38 @@ app = Celery('worker') # type: ignore
 # the configuration object to child processes.
 # - namespace='CELERY' means all celery-related configuration keys
 #   should have a `CELERY_` prefix.
-app.config_from_object('django.conf:settings', namespace='CELERY')
+# app.config_from_object('django.conf:settings', namespace='CELERY')
 
-app.conf.update(
-    task_routes = {
-        'worker.tasks.dumb': {
-            'queue': 'celery'
-        },
-        'worker.tasks.add': {
-            'queue': 'celery'
-        }
-    },
-)
+# app.conf.update(
+#     task_routes = {
+#         'worker.tasks.fetch_data_for_location': {
+#             'queue': 'queue1'
+#         },
+#         'worker.tasks.send_weather_data_to_server': {
+#             'queue': 'queue2'
+#         }
+#     },
+# )
 
 # Rate limiting
 # app.conf.task_default_rate_limit = '5/m'  # 5 tasks per minute
 
 # Redis specific
 # https://docs.celeryq.dev/en/stable/userguide/routing.html#redis-message-priorities
-app.conf.broker_transport_options = {
-    'priority_steps': list(range(10)), # default is 4
-    # 'sep': ':',
-    'queue_order_strategy': 'priority',
-}
-"""
-['celery', 'celery:1', 'celery:2', 'celery:3', 'celery:4', 'celery:5', 'celery:6', 'celery:7', 'celery:8', 'celery:9']
-"""
+# app.conf.broker_transport_options = {
+#     'priority_steps': list(range(10)), # default is 4
+#     # 'sep': ':',
+#     'queue_order_strategy': 'priority',
+# }
+# """
+# ['celery', 'celery:1', 'celery:2', 'celery:3', 'celery:4', 'celery:5', 'celery:6', 'celery:7', 'celery:8', 'celery:9']
+# """
 
 # app.conf.task_routes = {
 #     'worker.tasks.dumb': {
 #         'queue': 'queue1'
 #     },
-#     'worker.tasks.add': {
+#     'worker.tasks.send_weather_data_to_server': {
 #         'queue': 'queue2'
 #     }
 # }
