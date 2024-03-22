@@ -54,31 +54,19 @@ class WeatherAPI:
                     params = endpoint['params'].copy()
                     params['serviceKey'] = self.service_key  # Make sure this is the correct key
                     params['base_date'] = base_date
-                    params['base_time'] = base_time
+                    params['base_time'] = rounded_time
                     params['nx'] = nx
-                    params['ny'] = ny
-                    time.sleep(0.2)
-                    print(base_date, base_time, nx, ny)
+                    params['ny'] = ny                    
+                    time.sleep(1)
+                    print(rounded_time)
                     
-                    try:
-                        response = requests.get(url, params=params)
-                        response.raise_for_status()
-                        json_data = response.json()
-                        data = json.dumps(json_data, indent=4, ensure_ascii=False)
-                        logger.info("Successful API call to %s", url)
-                        return json_data
-                    except requests.HTTPError as http_err:
-                                # HTTP 에러를 로그에 기록하고 실패한 상태를 설정합니다.
-                                logger.error("HTTP error occurred: %s", http_err)
-                                self.update_state(state='FAILURE', meta={'exc': str(http_err)})
-                                raise Ignore()  # 태스크를 실패한 것으로 마크하고 더 이상의 재시도를 하지 않도록 합니다.
-
-                    except Exception as err:
-                        # 일반 예외를 로그에 기록하고 실패한 상태를 설정합니다.
-                        logger.error("An error occurred: %s", err)
-                        self.update_state(state='FAILURE', meta={'exc': str(err)})
-                        raise Ignore()  # 태스크를 실패한 것으로 마크하고 더 이상의 재시도를 하지 않도록 합니다.
-
+                    response = requests.get(url, params=params)
+                    response.raise_for_status()  # Raises an HTTPError for bad responses
+                    # Successful response handling
+                    # formatted_response = json.dumps(response.json(), indent=4, ensure_ascii=False)
+                    # print(formatted_response)
+                    return response.json()
+                        
         # 실행시 20분 소요 매시간 30분 기준으로 데이터를 받을수있다. 
         # 현재시간 기준으로 
         # 에러 2개 발생 슬립 0.2
@@ -93,32 +81,20 @@ class WeatherAPI:
                     params['base_time'] = rounded_time
                     params['nx'] = nx
                     params['ny'] = ny
-                    time.sleep(0.2)
-                    print(base_date, base_time, nx, ny)
+                    time.sleep(1)
+                    print(rounded_time)
+                          
                     # print(base_date, thirty_minutes_earlier, nx, ny)
                     # print(base_date, thirty_minutes_earlier, nx, ny)
                     # print(base_date, thirty_minutes_earlier, nx, ny)
-
-                    try:
-                        response = requests.get(url, params=params)
-                        response.raise_for_status()  # Raises an HTTPError for bad responses
-                        # Successful response handling
-                        formatted_response = json.dumps(response.json(), indent=4, ensure_ascii=False)
-                        # print(formatted_response)
-                        return response.json()
                     
-                    except requests.HTTPError as http_err:
-                        # HTTP 에러를 로그에 기록하고 실패한 상태를 설정합니다.
-                        logger.error("HTTP error occurred: %s", http_err)
-                        self.update_state(state='FAILURE', meta={'exc': str(http_err)})
-                        raise Ignore()  # 태스크를 실패한 것으로 마크하고 더 이상의 재시도를 하지 않도록 합니다.
-
-                    except Exception as err:
-                        # 일반 예외를 로그에 기록하고 실패한 상태를 설정합니다.
-                        logger.error("An error occurred: %s", err)
-                        self.update_state(state='FAILURE', meta={'exc': str(err)})
-                        raise Ignore()  # 태스크를 실패한 것으로 마크하고 더 이상의 재시도를 하지 않도록 합니다.
-                    
+                    response = requests.get(url, params=params)
+                    response.raise_for_status()  # Raises an HTTPError for bad responses
+                    # Successful response handling
+                    # formatted_response = json.dumps(response.json(), indent=4, ensure_ascii=False)
+                    # print(formatted_response)
+                    return response.json()
+                        
         #base_time 0500 고정
         #슬립 0.2에 여섯개 에러 발생
         elif endpoint_name == '단기예보조회':
@@ -135,26 +111,13 @@ class WeatherAPI:
                     # print(base_date, base_time, nx, ny)
                     time.sleep(1)
                     
-                    try:
-                        response = requests.get(url, params=params)
-                        response.raise_for_status()  # Raises an HTTPError for bad responses
-                        # Successful response handling
-                        formatted_response = json.dumps(response.json(), indent=4, ensure_ascii=False)
-                        print(formatted_response)
-                        return response.json()
-                    
-                    except requests.HTTPError as http_err:
-                                # HTTP 에러를 로그에 기록하고 실패한 상태를 설정합니다.
-                                logger.error("HTTP error occurred: %s", http_err)
-                                self.update_state(state='FAILURE', meta={'exc': str(http_err)})
-                                raise Ignore()  # 태스크를 실패한 것으로 마크하고 더 이상의 재시도를 하지 않도록 합니다.
-
-                    except Exception as err:
-                        # 일반 예외를 로그에 기록하고 실패한 상태를 설정합니다.
-                        logger.error("An error occurred: %s", err)
-                        self.update_state(state='FAILURE', meta={'exc': str(err)})
-                        raise Ignore()  # 태스크를 실패한 것으로 마크하고 더 이상의 재시도를 하지 않도록 합니다.
-    
+                    response = requests.get(url, params=params)
+                    response.raise_for_status()  # Raises an HTTPError for bad responses
+                    # Successful response handling
+                    # formatted_response = json.dumps(response.json(), indent=4, ensure_ascii=False)
+                    # print(formatted_response)
+                    return response.json()
+                        
     def fetch_forecast_data_version(self, forecast_type, base_date, base_time):
 
         endpoint_name = '예보버전조회'  # Adjusted to match the provided example

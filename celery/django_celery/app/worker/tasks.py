@@ -18,35 +18,31 @@ weather_api = WeatherAPI(WeatherAPI.load_api_config(api_config_path),
                          WeatherAPI.load_service_key(service_key_path)['weather_serviceKey'])
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
+
+@shared_task(bind=True, max_retries=5, default_retry_delay=150)
 def fetch_data_for_location(self, endpoint_name, nx, ny):
     try:
-        # Print the initial request info
         print(f"Starting task for endpoint {endpoint_name} with nx={nx}, ny={ny}")
         result = weather_api.data_by_shot_forecast(endpoint_name, nx, ny)
-        # Log success
+        if result is None:
+            raise ValueError("Received invalid JSON response")
         logger.info(f"Success: Data fetched for {endpoint_name} at nx={nx}, ny={ny}")
-        # Optionally, print a success message
         print(f"Task succeeded for endpoint {endpoint_name} with nx={nx}, ny={ny}")
         return result
-    except requests.HTTPError as e:
-        # Log and print the HTTP error and retry attempt
-        logger.warning(f"HTTP error on {endpoint_name}: {e}. This is retry number {self.request.retries + 1}. Retrying...")
-        print(f"HTTP error for endpoint {endpoint_name} at nx={nx}, ny={ny}: {e}. Attempting retry {self.request.retries + 1}")
-        try:
-            # Retry the task
-            self.retry(exc=e)
-        except MaxRetriesExceededError as e:
-            # Log and print the failure after maximum retries
-            logger.error(f"Max retries exceeded after {self.request.retries} attempts for task {self.request.id} with endpoint {endpoint_name}, nx={nx}, ny={ny}")
-            print(f"Max retries exceeded for task {self.request.id} with endpoint {endpoint_name}, nx={nx}, ny={ny}. Error: {e}")
-            raise e
+    except (requests.exceptions.ConnectionError, requests.HTTPError, ValueError) as e:
+        logger.warning(f"Connection or HTTP error on {endpoint_name}: {e}. This is retry number {self.request.retries + 1}. Retrying...")
+        print(f"Connection or HTTP error for endpoint {endpoint_name} at nx={nx}, ny={ny}: {e}. Attempting retry {self.request.retries + 1}")
+        self.retry(exc=e)
+    except MaxRetriesExceededError as e:
+        logger.error(f"Max retries exceeded after {self.request.retries} attempts for task {self.request.id} with endpoint {endpoint_name}, nx={nx}, ny={ny}")
+        print(f"Max retries exceeded for task {self.request.id} with endpoint {endpoint_name}, nx={nx}, ny={ny}. Error: {e}")
+        raise e
     except Exception as e:
-        # Log and print any other exceptions and mark the task as failed
         logger.error(f"Error fetching data for {endpoint_name} at nx={nx}, ny={ny}: {e}")
         print(f"Task failed for endpoint {endpoint_name} with nx={nx}, ny={ny}. Error: {e}")
         raise e
-    
+
+
 @shared_task
 def data_by_shot_forecast(endpoint_name):
     # Path to your CSV file
