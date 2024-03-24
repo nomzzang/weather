@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # MariaDB/MySQL을 위한 엔진
+        'NAME': 'weather',         # 데이터베이스 이름
+        'USER': 'root',         # 데이터베이스 사용자 이름
+        'PASSWORD': '1234', # 데이터베이스 비밀번호
+        'HOST': 'localhost',                  # 데이터베이스 호스트 (로컬에서 실행 시 'localhost')
+        'PORT': '3306',                       # 데이터베이스 포트 (MariaDB/MySQL의 기본 포트는 3306)
     }
 }
 
